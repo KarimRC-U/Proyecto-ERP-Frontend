@@ -9,6 +9,7 @@
           <h1 class="font-weight-bold">Please Sign In</h1>
           <p>Welcome back!!</p>
         </div>
+
         <v-form v-model="valid" @submit.prevent="submitForm" lazy-validation>
           <v-text-field
             label="Email address"
@@ -42,15 +43,18 @@
           >
             Sign In
           </v-btn>
+
+          <!-- ✅ Botón corregido para ir a /auth/fpassword -->
           <v-btn
             text
             color="primary"
-            @click="forgotPassword"
+            @click="$router.push('/auth/fpassword')"
           >
             I forgot my password
           </v-btn>
         </v-form>
       </v-col>
+
       <v-col cols="12" md="6" class="pa-0">
         <v-img
           src="/images/login-background.jpg"
@@ -82,13 +86,8 @@ export default {
   },
   methods: {
     submitForm() {
-      // Aquí va tu lógica para iniciar sesión
       alert(`Email: ${this.email}, Password: ${this.password}`);
-    },
-    forgotPassword() {
-      // Redirige o abre modal para recuperar contraseña
-      alert('Forgot password clicked');
-    },
+    }
   }
 }
 </script>

@@ -81,9 +81,9 @@ export default {
       iconfont: 'mdi'
     }
   },
-  router: {
-    middleware: ['auth']
-  },
+  //router: {
+ //   middleware: ['auth']
+ // },
   build: {
   }
 }
