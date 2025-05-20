@@ -6,7 +6,7 @@
 
 <script>
 // import loginUser from '~/components/auth/loginUser.vue'
-import loginUser from '~/layouts/principal'
+import loginUser from '~/pages/staff'
 export default {
   name: 'IndexPage',
   components: {
