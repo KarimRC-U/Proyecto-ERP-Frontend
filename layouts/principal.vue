@@ -59,7 +59,7 @@
               </v-list-item>
             </v-list-group>
 
-            <v-divider v-if="item.title === 'Patients List'" :key="`divider-clinic-${index}`" class="my-2" />
+            <v-divider v-if="item.title === 'Staffs List'" :key="`divider-clinic-${index}`" class="my-2" />
 
             <v-divider v-if="item.title === 'Account'" :key="`divider-settings-${index}`" class="my-2" />
           </template>
@@ -110,9 +110,9 @@ export default {
           roles: ['admin', 'rh', 'secretaria']
         },
         {
-          title: 'Patient List',
+          title: 'Staff List',
           icon: 'mdi-account-multiple',
-          path: '/principal/patients',
+          path: '/principal/Staffs',
           roles: ['admin', 'rh', 'secretaria']
         },
         {
