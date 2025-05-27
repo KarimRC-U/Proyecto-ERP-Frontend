@@ -23,19 +23,19 @@
           mdi-filter-outline
         </v-icon>
       </v-btn>
-      <v-btn class="btnStaff" @click="openDialog">
+      <v-btn class="btnPatient" @click="openDialog">
         <v-icon>
           mdi-plus
         </v-icon>
         <span>
-          Add Staff
+          Add Patient
         </span>
       </v-btn>
     </v-row>
     <v-row align="center" justify="start">
       <v-data-table
         :headers="headers"
-        :items="staffs"
+        :items="pacientes"
         :items-per-page="10"
         dense
         class="mt-4"
@@ -49,10 +49,10 @@
           />
         </template>
         <template #[`item.actions`]="{ item }">
-          <v-icon small color="primary" title="Edit" @click="editstaff(item)">
+          <v-icon small color="primary" title="Edit" @click="editPaciente(item)">
             mdi-pencil
           </v-icon>
-          <v-icon small color="red" title="Delete" @click="deletestaff(item)">
+          <v-icon small color="red" title="Delete" @click="deletePaciente(item)">
             mdi-delete
           </v-icon>
         </template>
@@ -61,7 +61,7 @@
     <v-dialog v-model="dialogAddPacient" persistent max-width="800px">
       <v-card color="indigo lighten-5" elevation="0">
         <v-card-title>
-          Add Staff
+          Add Patient
           <v-spacer />
           <v-btn icon class="mr-2" color="gray darken-1" @click="dialogAddPacient = false">
             <v-icon>
@@ -258,9 +258,9 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn class="btnStaff" @click="savePacient">
+          <v-btn class="btnPatient" @click="savePacient">
             <span>
-              Add Staff
+              Add Patient
             </span>
           </v-btn>
         </v-card-actions>
@@ -273,7 +273,7 @@
 export default {
   data () {
     return {
-      staffs: [],
+      pacientes: [],
       headers: [
         { text: 'Photo', value: 'photo', sortable: false },
         { text: 'Full Name', value: 'fullname' },
@@ -306,7 +306,7 @@ export default {
     }
   },
   mounted () {
-    this.loadstaffs()
+    this.loadPacientes()
   },
   methods: {
     openDialog () {
@@ -340,51 +340,50 @@ export default {
     async savePacient () {
       try {
         if (this.pacient.id) {
-          await this.$axios.put(`/staffs/update/${this.pacient.id}`, this.pacient)
+          await this.$axios.put(`/pacientes/update/${this.pacient.id}`, this.pacient)
         } else {
-          await this.$axios.post('/staffs/create', this.pacient)
+          await this.$axios.post('/pacientes/create', this.pacient)
         }
         this.$store.dispatch('alert/triggerAlert', {
-          message: 'Staff saved successfully',
+          message: 'Patient saved successfully',
           type: 'success'
         })
         this.dialogAddPacient = false
-        this.loadstaffs()
+        this.loadPacientes()
       } catch (error) {
-        const errorMessage = 'An error occurred while saving the Staff.'
+        const errorMessage = 'An error occurred while saving the patient.'
         this.$store.dispatch('alert/triggerAlert', {
           message: errorMessage,
           type: 'error'
         })
       }
     },
-    async loadstaffs () {
+    async loadPacientes () {
       try {
-        const response = await this.$axios.get('/staffs')
-        this.staffs = response.data
-        console.log('Loaded Staffs:', JSON.parse(JSON.stringify(this.staffs)))
+        const response = await this.$axios.get('/pacientes')
+        this.pacientes = response.data
       } catch (error) {
         this.$store.dispatch('alert/triggerAlert', {
-          message: 'Error loading Staffs',
+          message: 'Error loading patients',
           type: 'error'
         })
       }
     },
-    editstaff (staff) {
-      this.pacient = { ...staff }
+    editPaciente (paciente) {
+      this.pacient = { ...paciente }
       this.dialogAddPacient = true
     },
-    async deletestaff (staff) {
+    async deletePaciente (paciente) {
       try {
-        await this.$axios.delete(`/staffs/delete/${staff.id}`)
+        await this.$axios.delete(`/pacientes/delete/${paciente.id}`)
         this.$store.dispatch('alert/triggerAlert', {
-          message: 'Staff deleted successfully',
+          message: 'Patient deleted successfully',
           type: 'success'
         })
-        this.loadstaffs()
+        this.loadPacientes()
       } catch (error) {
         this.$store.dispatch('alert/triggerAlert', {
-          message: 'Error deleting Staff',
+          message: 'Error deleting patient',
           type: 'error'
         })
       }
@@ -411,7 +410,7 @@ export default {
   text-transform: none !important;
 }
 
-.btnStaff {
+.btnPatient {
   text-transform: none !important;
   color: white;
   border-radius: 5px !important;
