@@ -6,13 +6,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import Sidebar from '@/components/SidebarLink'
-
-export default {
-  components: {
-    Sidebar
-  }
-}
-</script>
