@@ -33,7 +33,7 @@ export default {
     '@nuxtjs/auth-next'
   ],
   axios: {
-    baseURL: 'process.env.baseURL'
+    baseURL: 'http://localhost:5001/api'
   },
   auth: {
     strategies: {
