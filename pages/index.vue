@@ -1,21 +1,16 @@
 <template>
-  <DefaultLayout>
-    <v-container>
-      <StaffList />
-    </v-container>
-  </DefaultLayout>
+  <v-container>
+    <login-user />
+  </v-container>
 </template>
 
 <script>
-import DefaultLayout from '@/layouts/defaultLayout.vue'
-import '@fortawesome/fontawesome-free/css/all.css'
-import StaffList from '~/components/staffList'
-
+// import loginUser from '~/components/auth/loginUser.vue'
+import loginUser from '~/components/patients/patientsAll'
 export default {
   name: 'IndexPage',
   components: {
-    DefaultLayout,
-    StaffList
+    loginUser
   }
 }
 </script>
