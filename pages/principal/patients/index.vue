@@ -1,12 +1,12 @@
 <template>
-  <patients-all />
+  <Staffs-all />
 </template>
 
 <script>
-import patientsAll from '@/components/patients/patientsAll.vue'
+import StaffsAll from '@/components/Staffs/StaffsAll.vue'
 export default {
   components: {
-    patientsAll
+    StaffsAll
   },
   layout: 'principal',
   middleware: 'auth'
