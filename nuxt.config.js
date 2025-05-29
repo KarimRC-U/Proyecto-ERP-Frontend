@@ -33,7 +33,11 @@ export default {
     '@nuxtjs/auth-next'
   ],
   axios: {
+<<<<<<< HEAD
     baseURL: 'http://localhost:5001/api'
+=======
+    baseURL: process.env.baseURL
+>>>>>>> parent of df9e491 (Revert "Obtener staffs del back")
   },
   auth: {
     strategies: {
