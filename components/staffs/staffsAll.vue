@@ -58,12 +58,12 @@
         </template>
       </v-data-table>
     </v-row>
-    <v-dialog v-model="dialogAddPacient" persistent max-width="800px">
+    <v-dialog v-model="dialogAddstaff" persistent max-width="800px">
       <v-card color="indigo lighten-5" elevation="0">
         <v-card-title>
           Add Staff
           <v-spacer />
-          <v-btn icon class="mr-2" color="gray darken-1" @click="dialogAddPacient = false">
+          <v-btn icon class="mr-2" color="gray darken-1" @click="dialogAddstaff = false">
             <v-icon>
               mdi-close
             </v-icon>
@@ -83,7 +83,7 @@
                 <v-row>
                   <v-col cols="12">
                     <v-text-field
-                      v-model="pacient.fullName"
+                      v-model="staff.nombre"
                       label="Full Name"
                       required
                       outlined
@@ -93,7 +93,7 @@
                 <v-row>
                   <v-col cols="4">
                     <v-text-field
-                      v-model="pacient.email"
+                      v-model="staff.correo"
                       label="Email"
                       required
                       outlined
@@ -101,7 +101,7 @@
                   </v-col>
                   <v-col cols="4">
                     <v-text-field
-                      v-model="pacient.mobile"
+                      v-model="staff.telefono"
                       label="Mobile"
                       required
                       outlined
@@ -111,7 +111,7 @@
                     <v-menu ref="menu" :close-on-content-click="false" transition="scale-transition" offset-y min-width="auto">
                       <template #activator="{on,attrs}">
                         <v-text-field
-                          v-model="pacient.dateBirth"
+                          v-model="staff.dateBirth"
                           label="Date of Birth"
                           prepend-icon="mdi-calendar"
                           readonly
@@ -120,7 +120,7 @@
                         />
                       </template>
                       <v-date-picker
-                        v-model="pacient.dateBirth"
+                        v-model="staff.dateBirth"
                         @input="menu = false"
                       />
                     </v-menu>
@@ -129,7 +129,7 @@
                 <!-- Sexo y Estado Civil con Botones Cuadrados -->
                 <v-row>
                   <v-col cols="6">
-                    <v-btn-toggle v-model="pacient.sex" mandatory>
+                    <v-btn-toggle v-model="staff.sex" mandatory>
                       <v-btn value="male" outlined>
                         Male
                       </v-btn>
@@ -142,7 +142,7 @@
                     </v-btn-toggle>
                   </v-col>
                   <v-col cols="6">
-                    <v-btn-toggle v-model="pacient.maritalStatus" mandatory>
+                    <v-btn-toggle v-model="staff.maritalStatus" mandatory>
                       <v-btn value="single" outlined>
                         Single
                       </v-btn>
@@ -164,7 +164,7 @@
                 <v-row style="margin: 10px !important;">
                   <v-col cols="12">
                     <v-text-field
-                      v-model="pacient.address"
+                      v-model="staff.address"
                       label="Address"
                       required
                       outlined
@@ -174,7 +174,7 @@
                 <v-row>
                   <v-col cols="4">
                     <v-text-field
-                      v-model="pacient.zipCode"
+                      v-model="staff.zipCode"
                       label="Zip Code"
                       required
                       outlined
@@ -186,7 +186,7 @@
                 <v-row>
                   <v-col cols="12">
                     <v-checkbox
-                      v-model="pacient.international"
+                      v-model="staff.international"
                       label="Is Foreign"
                       @change="handleForeignChange"
                     />
@@ -197,14 +197,14 @@
                 <v-row>
                   <v-col cols="4">
                     <v-text-field
-                      v-model="pacient.state"
+                      v-model="staff.state"
                       label="State"
                       outlined
                     />
                   </v-col>
                   <v-col cols="4">
                     <v-text-field
-                      v-model="pacient.district"
+                      v-model="staff.district"
                       label="District"
                       outlined
                     />
@@ -215,11 +215,11 @@
                 <v-row>
                   <v-col cols="4">
                     <v-text-field
-                      v-model="pacient.country"
+                      v-model="staff.country"
                       label="Country"
-                      :disabled="!pacient.international"
+                      :disabled="!staff.international"
                       outlined
-                      :value="pacient.international ? '' : 'Mexico'"
+                      :value="staff.international ? '' : 'Mexico'"
                     />
                   </v-col>
                 </v-row>
@@ -244,8 +244,8 @@
                 <v-row>
                   <v-col cols="12" class="text-center">
                     <v-img
-                      v-if="pacient.photo"
-                      :src="'data:image/jpeg;base64,' + pacient.photo"
+                      v-if="staff.photo"
+                      :src="'data:image/jpeg;base64,' + staff.photo"
                       max-width="200"
                       max-height="200"
                       class="mt-2"
@@ -258,7 +258,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn class="btnStaff" @click="savePacient">
+          <v-btn class="btnStaff" @click="savestaff">
             <span>
               Add Staff
             </span>
@@ -281,7 +281,7 @@ export default {
         { text: 'Mobile', value: 'mobile' },
         { text: 'Actions', value: 'actions', sortable: false }
       ],
-      pacient: {
+      staff: {
         fullName: '',
         email: '',
         mobile: '',
@@ -301,7 +301,7 @@ export default {
       },
       photoFile: null,
       activeTab: 0,
-      dialogAddPacient: false,
+      dialogAddstaff: false,
       menu: false
     }
   },
@@ -310,7 +310,7 @@ export default {
   },
   methods: {
     openDialog () {
-      this.dialogAddPacient = true
+      this.dialogAddstaff = true
       this.activeTab = 0
     },
     handleFileUpload (event) {
@@ -326,29 +326,29 @@ export default {
       }
 
       reader.onload = (e) => {
-        this.pacient.photo = e.target.result.split(',')[1]
+        this.staff.photo = e.target.result.split(',')[1]
       }
       reader.readAsDataURL(file)
     },
     handleForeignChange () {
-      if (!this.pacient.international) {
-        this.pacient.country = 'Mexico'
-        this.pacient.state = ''
-        this.pacient.city = ''
+      if (!this.staff.international) {
+        this.staff.country = 'Mexico'
+        this.staff.state = ''
+        this.staff.city = ''
       }
     },
-    async savePacient () {
+    async savestaff () {
       try {
-        if (this.pacient.id) {
-          await this.$axios.put(`/staffs/update/${this.pacient.id}`, this.pacient)
+        if (this.staff.id) {
+          await this.$axios.put(`/staffs/update/${this.staff.id}`, this.staff)
         } else {
-          await this.$axios.post('/staffs/create', this.pacient)
+          await this.$axios.post('/staffs/create', this.staff)
         }
         this.$store.dispatch('alert/triggerAlert', {
           message: 'Staff saved successfully',
           type: 'success'
         })
-        this.dialogAddPacient = false
+        this.dialogAddstaff = false
         this.loadstaffs()
       } catch (error) {
         const errorMessage = 'An error occurred while saving the Staff.'
@@ -371,8 +371,8 @@ export default {
       }
     },
     editstaff (staff) {
-      this.pacient = { ...staff }
-      this.dialogAddPacient = true
+      this.staff = { ...staff }
+      this.dialogAddstaff = true
     },
     async deletestaff (staff) {
       try {
