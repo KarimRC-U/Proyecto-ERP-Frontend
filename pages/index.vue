@@ -7,8 +7,9 @@
 </template>
 
 <script>
-import DefaultLayout from '../layouts/defaultLayout.vue'
-import StaffList from '../components/staffList.vue'
+import StaffList from '~/components/staffList.vue'
+import DefaultLayout from '@/layouts/defaultLayout.vue'
+import '@fortawesome/fontawesome-free/css/all.css'
 
 export default {
   name: 'IndexPage',

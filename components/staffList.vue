@@ -1,17 +1,27 @@
 <template>
   <v-container fluid>
     <v-card class="pa-6 rounded-xl elevation-2">
-      <!-- Header -->
+      <!-- Header con ajustes -->
       <v-row class="justify-space-between align-center mb-6">
-        <v-col cols="12" md="6">
+        <v-col cols="6">
           <h2 class="mb-1 font-weight-bold">
             All Staff
           </h2>
-          <p class="text-subtitle-2">
-            View, search for and add new staff
-          </p>
         </v-col>
-        <v-col cols="12" md="6" class="d-flex justify-end align-center">
+        <v-col cols="6" class="d-flex justify-end align-center">
+          <v-avatar size="50">
+            <img :src="staffImage" alt="Staff Image">
+          </v-avatar>
+          <div class="ml-2 text-caption">
+            <p class="mb-1">{{ staffName }}</p>
+            <p class="text-subtitle-2">{{ staffRole }}</p>
+          </div>
+        </v-col>
+      </v-row>
+
+      <!-- Barra de búsqueda y filtros -->
+      <v-row class="mb-4 align-center">
+        <v-col cols="3">
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
@@ -19,29 +29,37 @@
             outlined
             dense
             hide-details
-            class="mr-4"
+            class="small-search"
           />
-          <v-btn color="primary" class="rounded-lg font-weight-bold" @click="addStaff">
+        </v-col>
+        <v-col cols="2">
+          <v-card class="pa-2 text-center rounded-lg elevation-1">
+            <div class="text-h6 font-weight-bold">
+              {{ filteredStaff.length }}
+            </div>
+            <div class="text-caption">
+              Total Staff
+            </div>
+          </v-card>
+        </v-col>
+        <v-col cols="3">
+          <v-select
+            v-model="filter"
+            :items="filterOptions"
+            label="Filtrar por"
+            outlined
+            dense
+            hide-details
+          />
+        </v-col>
+        <v-col cols="4" class="d-flex justify-end">
+          <v-btn color="#14ADD6" class="rounded-lg font-weight-bold" @click="addStaff">
             Add New Staff
           </v-btn>
         </v-col>
       </v-row>
 
-      <!-- Card for total count -->
-      <v-row class="mb-4">
-        <v-col cols="12" md="3">
-          <v-card class="pa-4 text-center rounded-lg elevation-1">
-            <div class="text-h5 font-weight-bold">
-              {{ filteredStaff.length }}
-            </div>
-            <div class="text-caption">
-              Total number of staff
-            </div>
-          </v-card>
-        </v-col>
-      </v-row>
-
-      <!-- Tabla de datos sin slots personalizados -->
+      <!-- Tabla de staff -->
       <v-data-table
         :headers="headers"
         :items="filteredStaff"
@@ -78,16 +96,21 @@ export default {
   data () {
     return {
       search: '',
+      filter: '',
       staffs: [],
       loading: false,
+      staffImage: 'staff-placeholder.jpg', // Imagen del staff
+      staffName: 'John Doe',
+      staffRole: 'Manager',
+      filterOptions: ['Todos', 'Administración', 'RRHH', 'Técnico'],
       headers: [
         { text: 'First Name', value: 'nombre' },
-        { text: 'Last Name', value: 'last_name' },
-        { text: 'Gender', value: 'gender' },
-        { text: 'Staff ID', value: 'staff_id' },
-        { text: 'Phone Number', value: 'phone' },
-        { text: 'Role', value: 'role' },
-        { text: 'Designation', value: 'designation' },
+        { text: 'Last Name', value: 'apaterno' },
+        { text: 'Gender', value: 'genero' },
+        { text: 'Staff ID', value: 'staffid' },
+        { text: 'Phone Number', value: 'telefono' },
+        { text: 'Role', value: 'rol' },
+        { text: 'Designation', value: 'designacion' },
         { text: 'Action', value: 'action', sortable: false }
       ]
     }
@@ -104,12 +127,10 @@ export default {
   },
   methods: {
     addStaff () {
-      // Aquí puedes redirigir o mostrar un modal
       alert('Ir al formulario para agregar nuevo staff')
     },
     viewMore (item) {
-      // Ejemplo: navegación programática
-      this.$router.push(`/staff/${item.staff_id}`)
+      this.$router.push(`/staff/${item.staffid}`)
     }
   },
   async mounted () {
