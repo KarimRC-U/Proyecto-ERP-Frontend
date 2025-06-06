@@ -1,424 +1,148 @@
 <template>
-  <v-container>
-    <v-row align="center" justify="end">
-      <div>
-        <span class="title">
-          Lab Appointments
-        </span>
-      </div>
-      <v-spacer />
-      <v-text-field
-        label="Search"
-        append-icon="mdi-magnify"
-        single-line
-        hide-details
-        outlined
-        class="mr-3"
-      />
-      <v-btn class="btnFilter">
-        <span>
-          Filter
-        </span>
-        <v-icon>
-          mdi-filter-outline
-        </v-icon>
-      </v-btn>
-      <v-btn class="btnStaff" @click="openDialog">
-        <v-icon>
-          mdi-plus
-        </v-icon>
-        <span>
-          Add Staff
-        </span>
-      </v-btn>
-    </v-row>
-    <v-row align="center" justify="start">
+  <v-container fluid>
+    <v-card class="pa-6 rounded-xl elevation-2">
+      <v-row class="justify-space-between align-center mb-6">
+        <v-col cols="6">
+          <h2 class="mb-1 font-weight-bold">
+            All Staff
+          </h2>
+        </v-col>
+        <v-col cols="6" class="d-flex justify-end align-center">
+          <v-avatar size="50">
+            <img :src="staffImage" alt="Staff Image">
+          </v-avatar>
+          <div class="ml-2 text-caption">
+            <p class="mb-1">{{ staffName }}</p>
+            <p class="text-subtitle-2">{{ staffRole }}</p>
+          </div>
+        </v-col>
+      </v-row>
+
+      <!-- Barra de búsqueda y filtros -->
+      <v-row class="mb-4 align-center">
+        <v-col cols="3">
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Buscar staff"
+            outlined
+            dense
+            hide-details
+            class="small-search"
+          />
+        </v-col>
+        <v-col cols="2">
+          <v-card class="pa-2 text-center rounded-lg elevation-1">
+            <div class="text-h6 font-weight-bold">
+              {{ filteredStaff.length }}
+            </div>
+            <div class="text-caption">
+              Total Staff
+            </div>
+          </v-card>
+        </v-col>
+        <v-col cols="3">
+          <v-select
+            v-model="filter"
+            :items="filterOptions"
+            label="Fiter staff"
+            outlined
+            dense
+            hide-details
+          />
+        </v-col>
+        <v-col cols="4" class="d-flex justify-end">
+          <v-btn color="#14ADD6" class="rounded-lg font-weight-bold" @click="addStaff">
+            Add New Staff
+          </v-btn>
+        </v-col>
+      </v-row>
+
+      <!-- Tabla de staff -->
       <v-data-table
         :headers="headers"
-        :items="staffs"
-        :items-per-page="10"
+        :items="filteredStaff"
+        :items-per-page="12"
+        class="elevation-1 rounded-lg"
         dense
-        class="mt-4"
+        :loading="loading"
+        loading-text="Cargando..."
       >
-        <template #[`item.photo`]="{ item }">
-          <v-img
-            :src="'data:image/jpeg;base64,' + item.photo"
-            max-width="50"
-            max-height="50"
-            class="rounded-circle"
-          />
-        </template>
-        <template #[`item.actions`]="{ item }">
-          <v-icon small color="primary" title="Edit" @click="editstaff(item)">
-            mdi-pencil
-          </v-icon>
-          <v-icon small color="red" title="Delete" @click="deletestaff(item)">
-            mdi-delete
-          </v-icon>
+        <template #item="{ item }">
+          <tr>
+            <td>{{ item.nombre }}</td>
+            <td>{{ item.apaterno }}</td>
+            <td>{{ item.genero }}</td>
+            <td>{{ item.staffid }}</td>
+            <td>{{ item.telefono }}</td>
+            <td>{{ item.rol }}</td>
+            <td>{{ item.designacion }}</td>
+            <td>
+              <a href="#" @click.prevent="viewMore(item)">
+                View more
+              </a>
+            </td>
+          </tr>
         </template>
       </v-data-table>
-    </v-row>
-    <v-dialog v-model="dialogAddstaff" persistent max-width="800px">
-      <v-card color="indigo lighten-5" elevation="0">
-        <v-card-title>
-          Add Staff
-          <v-spacer />
-          <v-btn icon class="mr-2" color="gray darken-1" @click="dialogAddstaff = false">
-            <v-icon>
-              mdi-close
-            </v-icon>
-          </v-btn>
-        </v-card-title>
-        <v-card-text>
-          <v-tabs v-model="activeTab">
-            <v-tab>Demographics</v-tab>
-            <v-tab>Address</v-tab>
-            <v-tab>Photo</v-tab>
-          </v-tabs>
-
-          <v-tabs-items v-model="activeTab">
-            <!-- Demographics Tab -->
-            <v-tab-item>
-              <v-form style="margin: 10px !important;">
-                <v-row>
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="staff.nombre"
-                      label="Full Name"
-                      required
-                      outlined
-                    />
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="4">
-                    <v-text-field
-                      v-model="staff.correo"
-                      label="Email"
-                      required
-                      outlined
-                    />
-                  </v-col>
-                  <v-col cols="4">
-                    <v-text-field
-                      v-model="staff.telefono"
-                      label="Mobile"
-                      required
-                      outlined
-                    />
-                  </v-col>
-                  <v-col cols="4">
-                    <v-menu ref="menu" :close-on-content-click="false" transition="scale-transition" offset-y min-width="auto">
-                      <template #activator="{on,attrs}">
-                        <v-text-field
-                          v-model="staff.dateBirth"
-                          label="Date of Birth"
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                        />
-                      </template>
-                      <v-date-picker
-                        v-model="staff.dateBirth"
-                        @input="menu = false"
-                      />
-                    </v-menu>
-                  </v-col>
-                </v-row>
-                <!-- Sexo y Estado Civil con Botones Cuadrados -->
-                <v-row>
-                  <v-col cols="6">
-                    <v-btn-toggle v-model="staff.sex" mandatory>
-                      <v-btn value="male" outlined>
-                        Male
-                      </v-btn>
-                      <v-btn value="female" outlined>
-                        Female
-                      </v-btn>
-                      <v-btn value="other" outlined>
-                        Other
-                      </v-btn>
-                    </v-btn-toggle>
-                  </v-col>
-                  <v-col cols="6">
-                    <v-btn-toggle v-model="staff.maritalStatus" mandatory>
-                      <v-btn value="single" outlined>
-                        Single
-                      </v-btn>
-                      <v-btn value="married" outlined>
-                        Married
-                      </v-btn>
-                      <v-btn value="widowed" outlined>
-                        Widowed
-                      </v-btn>
-                    </v-btn-toggle>
-                  </v-col>
-                </v-row>
-              </v-form>
-            </v-tab-item>
-
-            <!-- Address Tab -->
-            <v-tab-item>
-              <v-form>
-                <v-row style="margin: 10px !important;">
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="staff.address"
-                      label="Address"
-                      required
-                      outlined
-                    />
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="4">
-                    <v-text-field
-                      v-model="staff.zipCode"
-                      label="Zip Code"
-                      required
-                      outlined
-                    />
-                  </v-col>
-                </v-row>
-
-                <!-- Opción Extranjero -->
-                <v-row>
-                  <v-col cols="12">
-                    <v-checkbox
-                      v-model="staff.international"
-                      label="Is Foreign"
-                      @change="handleForeignChange"
-                    />
-                  </v-col>
-                </v-row>
-
-                <!-- Campos de Dirección Condicionales -->
-                <v-row>
-                  <v-col cols="4">
-                    <v-text-field
-                      v-model="staff.state"
-                      label="State"
-                      outlined
-                    />
-                  </v-col>
-                  <v-col cols="4">
-                    <v-text-field
-                      v-model="staff.district"
-                      label="District"
-                      outlined
-                    />
-                  </v-col>
-                </v-row>
-
-                <!-- Cambiar país solo si es extranjero -->
-                <v-row>
-                  <v-col cols="4">
-                    <v-text-field
-                      v-model="staff.country"
-                      label="Country"
-                      :disabled="!staff.international"
-                      outlined
-                      :value="staff.international ? '' : 'Mexico'"
-                    />
-                  </v-col>
-                </v-row>
-              </v-form>
-            </v-tab-item>
-
-            <!-- Photo Tab -->
-            <v-tab-item>
-              <v-form style="margin: 10px !important;">
-                <v-row>
-                  <v-col cols="12">
-                    <v-file-input
-                      v-model="photoFile"
-                      label="Upload Photo"
-                      accept="image/*"
-                      prepend-icon="mdi-camera"
-                      outlined
-                      @change="handleFileUpload"
-                    />
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="12" class="text-center">
-                    <v-img
-                      v-if="staff.photo"
-                      :src="'data:image/jpeg;base64,' + staff.photo"
-                      max-width="200"
-                      max-height="200"
-                      class="mt-2"
-                    />
-                  </v-col>
-                </v-row>
-              </v-form>
-            </v-tab-item>
-          </v-tabs-items>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn class="btnStaff" @click="savestaff">
-            <span>
-              Add Staff
-            </span>
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    </v-card>
   </v-container>
 </template>
 
 <script>
 export default {
+  name: 'StaffsAll',
   data () {
     return {
+      search: '',
+      filter: '',
       staffs: [],
+      loading: false,
+      staffImage: 'staff-placeholder.jpg', // Imagen del staff
+      staffName: 'John Doe',
+      staffRole: 'Manager',
+      filterOptions: ['All staff', 'Admin staff', 'I.T staff', 'RH staff'],
       headers: [
-        { text: 'Photo', value: 'photo', sortable: false },
-        { text: 'Full Name', value: 'fullname' },
-        { text: 'Email', value: 'email' },
-        { text: 'Mobile', value: 'mobile' },
-        { text: 'Actions', value: 'actions', sortable: false }
-      ],
-      staff: {
-        fullName: '',
-        email: '',
-        mobile: '',
-        dateBirth: '',
-        motherTongue: '',
-        govId: '',
-        sex: '',
-        maritalStatus: '',
-        address: '',
-        city: '',
-        zipCode: '',
-        state: '',
-        country: 'Mexico',
-        district: '',
-        international: false,
-        photo: ''
-      },
-      photoFile: null,
-      activeTab: 0,
-      dialogAddstaff: false,
-      menu: false
+        { text: 'First Name', value: 'nombre' },
+        { text: 'Last Name', value: 'apaterno' },
+        { text: 'Gender', value: 'genero' },
+        { text: 'Staff ID', value: 'staffid' },
+        { text: 'Phone Number', value: 'telefono' },
+        { text: 'Role', value: 'rol' },
+        { text: 'Designation', value: 'designacion' },
+        { text: 'Action', value: 'action', sortable: false }
+      ]
     }
   },
-  mounted () {
-    this.loadstaffs()
+  computed: {
+    filteredStaff () {
+      const term = this.search.toLowerCase()
+      return this.staffs.filter(staff =>
+        Object.values(staff).some(val =>
+          typeof val === 'string' && val.toLowerCase().includes(term)
+        )
+      )
+    }
   },
   methods: {
-    openDialog () {
-      this.dialogAddstaff = true
-      this.activeTab = 0
+    addStaff () {
+      console.log('Add Staff button clicked')
+      this.$router.push('/principal/staffs/menuCrear')
     },
-    handleFileUpload (event) {
-      const file = event
-      const reader = new FileReader()
-
-      if (file.size > 500000) {
-        this.$store.dispatch('alert/triggerAlert', {
-          text: 'The uploaded image is too large. Please choose an image smaller than 500 KB.',
-          type: 'error'
-        })
-        return
-      }
-
-      reader.onload = (e) => {
-        this.staff.photo = e.target.result.split(',')[1]
-      }
-      reader.readAsDataURL(file)
-    },
-    handleForeignChange () {
-      if (!this.staff.international) {
-        this.staff.country = 'Mexico'
-        this.staff.state = ''
-        this.staff.city = ''
-      }
-    },
-    async savestaff () {
-      try {
-        if (this.staff.id) {
-          await this.$axios.put(`/staffs/update/${this.staff.id}`, this.staff)
-        } else {
-          await this.$axios.post('/staffs/create', this.staff)
-        }
-        this.$store.dispatch('alert/triggerAlert', {
-          message: 'Staff saved successfully',
-          type: 'success'
-        })
-        this.dialogAddstaff = false
-        this.loadstaffs()
-      } catch (error) {
-        const errorMessage = 'An error occurred while saving the Staff.'
-        this.$store.dispatch('alert/triggerAlert', {
-          message: errorMessage,
-          type: 'error'
-        })
-      }
-    },
-    async loadstaffs () {
-      try {
-        const response = await this.$axios.get('/staffs')
-        this.staffs = response.data
-        console.log('Loaded Staffs:', JSON.parse(JSON.stringify(this.staffs)))
-      } catch (error) {
-        this.$store.dispatch('alert/triggerAlert', {
-          message: 'Error loading Staffs',
-          type: 'error'
-        })
-      }
-    },
-    editstaff (staff) {
-      this.staff = { ...staff }
-      this.dialogAddstaff = true
-    },
-    async deletestaff (staff) {
-      try {
-        await this.$axios.delete(`/staffs/delete/${staff.id}`)
-        this.$store.dispatch('alert/triggerAlert', {
-          message: 'Staff deleted successfully',
-          type: 'success'
-        })
-        this.loadstaffs()
-      } catch (error) {
-        this.$store.dispatch('alert/triggerAlert', {
-          message: 'Error deleting Staff',
-          type: 'error'
-        })
-      }
+    viewMore (item) {
+      this.$router.push(`/staff/${item.staffid}`)
+    }
+  },
+  async mounted () {
+    this.loading = true
+    try {
+      const response = await this.$axios.get('/staffs')
+      this.staffs = response.data.staffs
+    } catch (error) {
+      console.error('Error al cargar el staff:', error)
+    } finally {
+      this.loading = false
     }
   }
 }
 </script>
-
-<style scoped>
-.title{
-  font-size: 24px;
-  font-weight: 500;
-  color: #101828;
-}
-
-.btnFilter {
-  background-color: white;
-  color: #101828 !important;
-  margin-right: 10px !important;
-  border: 1px solid #101828 !important;
-  border-radius: 5px !important;
-  padding: 5px 10px !important;
-  font-size: 14px !important;
-  text-transform: none !important;
-}
-
-.btnStaff {
-  text-transform: none !important;
-  color: white;
-  border-radius: 5px !important;
-  padding: 5px 10px !important;
-  background-color: #0e1680 !important;
-  font-size: 14px !important;
-  margin-right: 10px !important;
-  font-weight: 500 !important;
-}
-</style>

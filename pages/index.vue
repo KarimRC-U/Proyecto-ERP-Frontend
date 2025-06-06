@@ -1,13 +1,13 @@
 <template>
   <DefaultLayout>
     <v-container>
-      <StaffList />
+      <StaffsAll />
     </v-container>
   </DefaultLayout>
 </template>
 
 <script>
-import StaffList from '~/components/staffList.vue'
+import StaffsAll from '~/components/staffs/StaffsAll.vue'
 import DefaultLayout from '@/layouts/defaultLayout.vue'
 import '@fortawesome/fontawesome-free/css/all.css'
 
@@ -15,7 +15,7 @@ export default {
   name: 'IndexPage',
   components: {
     DefaultLayout,
-    StaffList
+    StaffsAll
   }
 }
 </script>
