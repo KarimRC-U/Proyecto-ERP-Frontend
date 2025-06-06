@@ -7,7 +7,7 @@
 
 <script>
 import DefaultLayout from '../layouts/defaultLayout.vue'
-import StaffsAll from '../components/staffs/StaffsAll.vue'
+import StaffsAll from '../components/staffList.vue'
 
 export default {
   components: {
