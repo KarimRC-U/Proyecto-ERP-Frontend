@@ -26,7 +26,7 @@ export default {
         { label: 'Staff', route: '/staff', icon: 'fas fa-users' },
         { label: 'Payment Voucher', route: '/payment-voucher', icon: 'fas fa-file-invoice-dollar' },
         { label: 'Payroll', route: '/payroll', icon: 'fas fa-wallet' },
-        { label: 'Memo', route: '/memo', icon: 'fas fa-sticky-note' },
+        { label: 'Memo', route: '/memo.vue', icon: 'fas fa-sticky-note' },
         { label: 'Circular', route: '/circular', icon: 'fas fa-bullhorn' },
         { label: 'Maintenance', route: '/maintenance', icon: 'fas fa-tools' },
         { label: 'Logistics', route: '/logistics', icon: 'fas fa-truck' },

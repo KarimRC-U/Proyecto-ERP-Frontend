@@ -1,7 +1,6 @@
 <template>
   <v-container fluid>
     <v-card class="pa-6 rounded-xl elevation-2">
-      <!-- Header con ajustes -->
       <v-row class="justify-space-between align-center mb-6">
         <v-col cols="6">
           <h2 class="mb-1 font-weight-bold">
@@ -46,7 +45,7 @@
           <v-select
             v-model="filter"
             :items="filterOptions"
-            label="Filtrar por"
+            label="Fiter staff"
             outlined
             dense
             hide-details
@@ -67,7 +66,7 @@
         class="elevation-1 rounded-lg"
         dense
         :loading="loading"
-        loading-text="Cargando personal..."
+        loading-text="Cargando..."
       >
         <template #item="{ item }">
           <tr>
@@ -102,7 +101,7 @@ export default {
       staffImage: 'staff-placeholder.jpg', // Imagen del staff
       staffName: 'John Doe',
       staffRole: 'Manager',
-      filterOptions: ['Todos', 'Administración', 'RRHH', 'Técnico'],
+      filterOptions: ['All staff', 'Admin staff', 'I.T staff', 'RH staff'],
       headers: [
         { text: 'First Name', value: 'nombre' },
         { text: 'Last Name', value: 'apaterno' },
