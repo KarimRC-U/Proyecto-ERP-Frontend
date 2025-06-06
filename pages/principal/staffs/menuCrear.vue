@@ -1,12 +1,13 @@
 <template>
-  <Staffs-all />
+  <add-staff />
 </template>
 
 <script>
-import StaffsAll from '@/components/Staffs/StaffsAll.vue'
+import AddStaff from '@/components/menuCrear/addStaff.vue'
+
 export default {
   components: {
-    StaffsAll
+    AddStaff
   },
   layout: 'principal',
   middleware: 'auth'
