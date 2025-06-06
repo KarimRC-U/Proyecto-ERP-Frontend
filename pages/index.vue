@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import StaffList from '~/pages/maintenance.vue'
+import StaffList from '~/components/menuCrear/addStaff.vue'
 import DefaultLayout from '@/layouts/defaultLayout.vue'
 import '@fortawesome/fontawesome-free/css/all.css'
 
