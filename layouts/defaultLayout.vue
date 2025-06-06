@@ -4,10 +4,10 @@
       <img src="~assets/logo.png" alt="Logo" class="logo" />
       <ul>
         <li v-for="item in menuItems" :key="item.label">
-          <router-link :to="item.route" class="menu-link">
+          <nuxt-link :to="item.route" class="menu-link">
             <i :class="item.icon" class="icon"></i>
             <span>{{ item.label }}</span>
-          </router-link>
+          </nuxt-link>
         </li>
       </ul>
     </aside>
@@ -22,14 +22,14 @@ export default {
   data () {
     return {
       menuItems: [
-        { label: 'Dashboard', route: '/dashboard', icon: 'fas fa-tachometer-alt' },
-        { label: 'Staff', route: '/staff', icon: 'fas fa-users' },
-        { label: 'Payment Voucher', route: '/payment-voucher', icon: 'fas fa-file-invoice-dollar' },
-        { label: 'Payroll', route: '/payroll', icon: 'fas fa-wallet' },
-        { label: 'Memo', route: '/memo.vue', icon: 'fas fa-sticky-note' },
-        { label: 'Circular', route: '/circular', icon: 'fas fa-bullhorn' },
-        { label: 'Maintenance', route: '/maintenance', icon: 'fas fa-tools' },
-        { label: 'Logistics', route: '/logistics', icon: 'fas fa-truck' },
+        { label: 'Dashboard', route: '/pages/dashboard', icon: 'fas fa-tachometer-alt' },
+        { label: 'Staff', route: '/components/staffList', icon: 'fas fa-users' },
+        { label: 'Payment Voucher', route: '/pages/payment-voucher', icon: 'fas fa-file-invoice-dollar' },
+        { label: 'Payroll', route: '/pages/payroll', icon: 'fas fa-wallet' },
+        { label: 'Memo', route: '/pages/memo.vue', icon: 'fas fa-sticky-note' },
+        { label: 'Circular', route: '/pages/circular', icon: 'fas fa-bullhorn' },
+        { label: 'Maintenance', route: '/pages/maintenance', icon: 'fas fa-tools' },
+        { label: 'Logistics', route: '/store/logistics', icon: 'fas fa-truck' },
         { label: 'Office Budget', route: '/office-budget', icon: 'fas fa-building' },
         { label: 'Stocks and Inventory', route: '/stocks', icon: 'fas fa-boxes' },
         { label: 'Notifications', route: '/notifications', icon: 'fas fa-bell' },

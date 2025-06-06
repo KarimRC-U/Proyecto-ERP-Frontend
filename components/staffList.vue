@@ -18,7 +18,6 @@
         </v-col>
       </v-row>
 
-      <!-- Barra de búsqueda y filtros -->
       <v-row class="mb-4 align-center">
         <v-col cols="3">
           <v-text-field
@@ -58,7 +57,6 @@
         </v-col>
       </v-row>
 
-      <!-- Tabla de staff -->
       <v-data-table
         :headers="headers"
         :items="filteredStaff"
@@ -126,7 +124,7 @@ export default {
   },
   methods: {
     addStaff () {
-      alert('Ir al formulario para agregar nuevo staff')
+      this.$router.push('/components/menuCrear/addStaff.vue')
     },
     viewMore (item) {
       this.$router.push(`/staff/${item.staffid}`)
